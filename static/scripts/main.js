@@ -1,4 +1,5 @@
-var socket = new WebSocket("ws://localhost:8080/ws");
+var HOST = location.origin.replace(/^http/, 'ws')
+var socket = new WebSocket(HOST + "/ws");
 
 var button = document.getElementById("button");
 

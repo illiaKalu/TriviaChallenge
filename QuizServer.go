@@ -41,6 +41,13 @@ var hub = trivia.Hub{
 
 func main() {
 
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		log.Fatal("$PORT must be set")
+
+	}
+
 	// JS, css and other static files handling
 	ScriptsDirectory := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", ScriptsDirectory))
@@ -53,7 +60,7 @@ func main() {
 	http.HandleFunc("/quiz", quizHandler)
 
 	log.Println("Listening at port 8080")
-	if err := http.ListenAndServe(":" + os.Getenv("PORT"), nil); err != nil {
+	if err := http.ListenAndServe(":" + port, nil); err != nil {
 		log.Fatal("Listen And Serve faile ! ", err)
 	}
 }
