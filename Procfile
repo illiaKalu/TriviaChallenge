@@ -1,1 +1,1 @@
-web: GoTriviaChallenge
+web: GoTriviaChallenge -port=$PORT
