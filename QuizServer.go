@@ -6,6 +6,7 @@ import (
 )
 import (
 	trivia "github.com/illiaKalu/GoTriviaChallenge/triviaAction"
+	"os"
 )
 
 func homePage(res http.ResponseWriter, req *http.Request) {
@@ -52,7 +53,7 @@ func main() {
 	http.HandleFunc("/quiz", quizHandler)
 
 	log.Println("Listening at port 8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":" + os.Getenv("PORT"), nil); err != nil {
 		log.Fatal("Listen And Serve faile ! ", err)
 	}
 }
