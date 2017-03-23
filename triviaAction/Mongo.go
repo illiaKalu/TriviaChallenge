@@ -1,35 +1,49 @@
 package triviaAction
 
 import (
-//	"gopkg.in/mgo.v2"
-//	"log"
+
+	"gopkg.in/mgo.v2"
+	"log"
+
 )
 
-var max int = 1
+var skipFactor int
+var questions []QuestionStruct
+
+func init() {
+	skipFactor = 1
+
+	session, err := mgo.Dial("mongodb://final_masquerade:pass@ds139470.mlab.com:39470/trivia_challenge")
+
+	if err != nil {
+		panic(err)
+	}
+
+	session.SetSafe(&mgo.Safe{})
+
+	c := session.DB("trivia_challenge").C("questionare")
+
+	c.Find(nil).All(&questions)
+	log.Print(questions[0])
+
+
+}
 
 func LoadQuestion() QuestionStruct{
 
-	//session, err := mgo.Dial("localhost")
-	//if err != nil {
-	//	panic(err)
-	//}
+	//		question = QuestionStruct{"error question, see logs", "error occured !"}
 
-	//questions := []QuestionStruct{}
-	//
-	//c := session.DB("trivia").C("questionare")
-	//log.Print(c.Find(nil).All(&questions))
-
-	if (max == 1) {
-		max = max + 1
+	if (skipFactor == 1) {
+		skipFactor = skipFactor + 1
 		return QuestionStruct{"Vita samaya krasivaya ?", "ans"}
 	}
-	if (max == 2) {
-		max += 1
+	if (skipFactor == 2) {
+		skipFactor += 1
 		return QuestionStruct{"quest 2 ?", "ans"}
 	}
 
-	if (max == 3) {
-		max = 1
+	if (skipFactor == 3) {
+		skipFactor = 1
 		return QuestionStruct{"quest 3 ?", "ans"}
 	}
 
