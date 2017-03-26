@@ -6,7 +6,7 @@ import (
 )
 import (
 	trivia "github.com/illiaKalu/GoTriviaChallenge/triviaAction"
-//	"os"
+	"os"
 )
 
 func homePage(res http.ResponseWriter, req *http.Request) {
@@ -45,13 +45,13 @@ var hub = trivia.Hub{
 
 func main() {
 
-	//port := os.Getenv("PORT")
-	port := "8080"
+	port := os.Getenv("PORT")
+	//port := "8080"
 
-	//if port == "" {
-	//	log.Fatal("$PORT must be set")
-	//
-	//}
+	if port == "" {
+		log.Fatal("$PORT must be set")
+
+	}
 
 	// JS, css and other static files handling
 	ScriptsDirectory := http.FileServer(http.Dir("static"))
