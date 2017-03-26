@@ -1,59 +1,62 @@
-.chat
-{
-    list-style: none;
-    margin: 0;
-    padding: 0;
+body {
+    background: url('http://i.imgur.com/Eor57Ae.jpg') no-repeat fixed center center;
+    background-size: cover;
+    font-family: Montserrat;
 }
 
-.chat li
-{
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    border-bottom: 1px dotted #B3A9A9;
+.container {
+    padding: 15px 30px;
+    margin: 10vh auto !important;
+    width: 90vw !important;
+    height: 70vh;
+    border: 1px solid rgba(218, 168, 168, 0.61);
+    border-radius: 10px;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    background-color: #65c8cc;
 }
 
-.chat li.left .chat-body
-{
-    margin-left: 60px;
-}
-
-.chat li.right .chat-body
-{
-    margin-right: 60px;
-}
-
-
-.chat li .chat-body p
-{
-    margin: 0;
-    color: #777777;
-}
-
-.panel .slidedown .glyphicon, .chat .glyphicon
-{
-    margin-right: 5px;
-}
-
-.panel-body
-{
+#box{
+    max-height: 65vh;
     overflow-y: scroll;
-    height: 250px;
+    height: inherit;
 }
 
-::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #F5F5F5;
+#inputComponents{
+    text-align: center;
+    margin-top: 50px;
 }
 
-::-webkit-scrollbar
-{
-    width: 12px;
-    background-color: #F5F5F5;
+#inputComponents input{
+    width: 40%;
 }
 
-::-webkit-scrollbar-thumb
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #555;
+#inputComponents #answerInputField {
+    color: white;
 }
+
+#inputComponents #sendButton {
+    margin-left: 55px !important;
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #72b4b3;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-button {
+    background-color: #7c2929;
+}
+
+
+
+
+
+
+
