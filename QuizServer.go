@@ -6,6 +6,7 @@ import (
 )
 import (
 	trivia "github.com/illiaKalu/GoTriviaChallenge/triviaAction"
+	// "os"
 	"os"
 )
 
@@ -24,7 +25,8 @@ func quizHandler(res http.ResponseWriter, req *http.Request) {
 	if nick := req.Form.Get("nickName"); nick == "" {
 		nick = "Anonymus"
 	}else {
-
+		// LOL
+		nick = "Anonymus"
 	}
 
 	http.ServeFile(res, req, "templates/quiz.html")

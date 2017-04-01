@@ -4,14 +4,16 @@ import (
 
 	"gopkg.in/mgo.v2"
 	"log"
-
 )
 
 var skipFactor int
-var questions []QuestionStruct
+var questionsCount int = -1
+var loadedQuestion QuestionStruct
+var collection = &mgo.Collection{}
 
 func init() {
-	skipFactor = 1
+
+	skipFactor = 0
 
 	session, err := mgo.Dial("mongodb://final_masquerade:pass@ds139470.mlab.com:39470/trivia_challenge")
 
@@ -21,32 +23,30 @@ func init() {
 
 	session.SetSafe(&mgo.Safe{})
 
-	c := session.DB("trivia_challenge").C("questionare")
+	collection = session.DB("trivia_challenge").C("questionare")
+	questionsCount, err = collection.Count()
 
-	c.Find(nil).All(&questions)
-	log.Print(questions[0])
-
+	if err != nil {
+		panic(err)
+	}
 
 }
 
 func LoadQuestion() QuestionStruct{
 
-	//		question = QuestionStruct{"error question, see logs", "error occured !"}
+	err := collection.Find(nil).Skip(skipFactor).One(&loadedQuestion)
 
-	if (skipFactor == 1) {
-		skipFactor = skipFactor + 1
-		return QuestionStruct{"Vita samaya krasivaya ?", "ans"}
-	}
-	if (skipFactor == 2) {
-		skipFactor += 1
-		return QuestionStruct{"quest 2 ?", "ans"}
+	if err != nil {
+		panic(err)
 	}
 
-	if (skipFactor == 3) {
-		skipFactor = 1
-		return QuestionStruct{"quest 3 ?", "ans"}
+	skipFactor++
+
+	if skipFactor >= questionsCount {
+		skipFactor = 0
 	}
 
-	return QuestionStruct{"quest LOL ?", "ans"}
+	log.Println(loadedQuestion)
+	return loadedQuestion
 
 }

@@ -22,8 +22,8 @@ type Hub struct {
 }
 
 type QuestionStruct struct {
-	Question_context string
-	Answer  	 string
+	Question_context string "question"
+	Answer  	 string "answer"
 }
 
 type MessageStruct struct {
