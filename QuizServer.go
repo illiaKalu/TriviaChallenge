@@ -6,7 +6,7 @@ import (
 )
 import (
 	trivia "github.com/illiaKalu/GoTriviaChallenge/triviaAction"
-	// "os"
+	"html/template"
 	"os"
 )
 
@@ -21,15 +21,19 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 func quizHandler(res http.ResponseWriter, req *http.Request) {
 
 	req.ParseForm()
+	nick := req.Form.Get("nickName")
 
-	if nick := req.Form.Get("nickName"); nick == "" {
-		nick = "Anonymus"
-	}else {
-		// LOL
+	if  nick == "" {
 		nick = "Anonymus"
 	}
 
-	http.ServeFile(res, req, "templates/quiz.html")
+	quizTemplate, err := template.ParseFiles("templates/quiz.html")  // Parse template file.
+
+	if err != nil {
+		panic(err)
+	}
+
+	quizTemplate.Execute(res, nick)
 }
 
 func wsPage(res http.ResponseWriter, req *http.Request) {

@@ -1,9 +1,7 @@
 package triviaAction
 
 import (
-
 	"gopkg.in/mgo.v2"
-	"log"
 )
 
 var skipFactor int
@@ -42,11 +40,11 @@ func LoadQuestion() QuestionStruct{
 
 	skipFactor++
 
+	// if it was last question -> start from beginning
 	if skipFactor >= questionsCount {
 		skipFactor = 0
 	}
 
-	log.Println(loadedQuestion)
 	return loadedQuestion
 
 }

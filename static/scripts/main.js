@@ -1,12 +1,14 @@
 var HOST = location.origin.replace(/^http/, 'ws')
 var socket = new WebSocket(HOST + "/ws");
-var text;
+var answerContext;
+var nickName;
 var button = document.getElementById("sendButton");
 
 button.addEventListener("click", sendAnswer);
 
 socket.onopen = function(){
-    console.log("Socket opened successfully");
+    nickName =  $('#nickNameHolder').text();
+    console.log("Socket opened successfully ");
 }
 
 socket.onmessage = function(event){
@@ -37,13 +39,14 @@ window.onbeforeunload = function(event){
 
 function sendAnswer(event) {
 
-    text = document.getElementById("answerInputField").value;
+    answerContext = $('#answerInputField').val() + "|" + nickName;
 
-    if (text != '') {
-        console.log('message sent. - ' + text)
-        socket.send(text);
+    if (answerContext.replace('|' + nickName, '') != '' && answerContext.length < 100) {
+        console.log('message sent. - ' + answerContext);
+        socket.send(answerContext);
     } else {
         //TODO
+        console.log('smth wrong with message');
     }
 
     $('#answerInputField').val('');

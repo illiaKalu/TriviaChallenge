@@ -87,11 +87,11 @@ func (hub *Hub) Start() {
 
 		case message := <- hub.Broadcast: {
 
-			if string(message) == question.Answer {
+			if strings.Contains(string(message), question.Answer) {
 				// true means that question WAS guessed
 				resetQuestion(true, hub, message)
 			}else {
-				convertAndSend(message, hub)
+				convertAndSend(string(message), hub)
 			}
 		}
 
@@ -116,7 +116,14 @@ func (hub *Hub) Start() {
 
 	}
 
+// reset called in 2 cases:
+// 1) question was guessed ( isGuessed = true )
+// 2) question was not guessed and hint service opened all letters ( isGuessed = false )
+/* anyway, clear hintcounter, hint, reset timer, load nextquestion and broadcast new question
+   actions should be done
+*/
 func resetQuestion(isGuessed bool, hub *Hub, message []byte) {
+
 	if (isGuessed){
 		sendCorrectAnswer(message, hub)
 	}else {
@@ -131,28 +138,48 @@ func resetQuestion(isGuessed bool, hub *Hub, message []byte) {
 	broadcastMessage(hub, questionByteArray)
 }
 
+// modify message by adding "correct answer was" mask and broadcast to clients
 func broadcastNotGuessed(hub *Hub) {
-	answerByteArr := []byte(" The correct answer was :  " + question.Answer)
+	answerByteArr := ("The correct answer was :  " + question.Answer)
 	convertAndSend(answerByteArr, hub)
 }
+
+// every time method called, replace next "*" character to actual letter
 func modifyAndBroadcastHint(hub *Hub) {
 	hintString = strings.Replace(hintString, string(hintString[hintCounter - 1]), string(question.Answer[hintCounter - 1]), 1)
-	convertAndSend( []byte("TriviaHint: " + hintString), hub)
+	convertAndSend( ("TriviaHint: " + hintString), hub)
 }
 
+// modify message by adding "correct" mask and broadcast to clients
 func sendCorrectAnswer(message []byte, hub *Hub) {
-	answerByteArr := []byte(" <----- CORRECT ! ")
-	message = append(message, answerByteArr...)
-	convertAndSend(message, hub)
+	answerByteArr := []byte(" CORRECT ------ > ")
+	message = append(answerByteArr, message ... )
+	convertAndSend(string(message), hub)
 }
 
-func convertAndSend(message []byte, hub *Hub) {
-	jsonMsg, err := json.Marshal(MessageStruct{string(message)})
+// converting message from message_context|nickname to "nickname: message_context"
+// marshal to JSON format
+func convertAndSend(message string, hub *Hub) {
 
-	if err != nil {
-		panic(err)
+	nickIndex := strings.Index(message, "|")
+
+	if nickIndex != -1 {
+		message = message[nickIndex + 1:] + ": " + message[:nickIndex]
 	}
-	broadcastMessage(hub, jsonMsg)
+
+
+	if jsonMsg, err := json.Marshal(MessageStruct{string(message)}); err != nil {
+		panic(err)
+	}else {
+		broadcastMessage(hub, jsonMsg)
+	}
+
+
+}
+
+// transform hint to string of "*"
+func makeHintString(size int) {
+	hintString = strings.Repeat("*", size)
 }
 
 func broadcastMessage(hub *Hub, msg []byte) {
@@ -161,6 +188,4 @@ func broadcastMessage(hub *Hub, msg []byte) {
 	}
 }
 
-func makeHintString(size int) {
-	hintString = strings.Repeat("*", size)
-}
+
